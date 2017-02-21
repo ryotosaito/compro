@@ -1,0 +1,92 @@
+#!/bin/bash
+
+#if $EDITOR is not set, exit
+#if OS is not Mac, exit or prepare pbcopy alternative 
+
+commands() {
+	echo "Commands:"
+	echo -e "  help     \t\tSee this help"
+	echo -e "  contest  \033[4mdirname\033[m\tCreate (if needed) and change directory for the contest"
+	echo -e "  task     \033[4mfilename\033[m\tCreate (if needed) and set file for the task"
+	echo -e "  edit     \t\tOpen editor and the file set"
+	echo -e "  case     \t\tSet test case from stdin"
+	echo -e "  test     \t\tCompile and run program with test case"
+	echo -e "  submit   \t\tCopy program to clipboard"
+	echo -e "  exit     \t\tFinish and exit"
+}
+
+init() {
+	if [[ -e configure ]]; then
+		while :
+		do
+			read -p "File 'configure' is already exists. Would you like to initialize? [y/n] " answer
+			case $answer in
+				"y" )
+					break;;
+				"n" )
+					return;;
+				* )
+					;;
+			esac
+		done
+	fi
+	# initialize
+	# configure
+	#  + template file
+	#  + compile
+	#  + run
+}
+
+for OPT in "$@"
+do
+	case $OPT in
+		--init)
+			echo "init"
+			init
+			exit;;
+	esac
+done
+
+cat << EOF
+
+=============================================================
+   compro - An Assistant Tools for Competitive Programming
+=============================================================
+Type \`help\` to list commands
+Type \`exit\` to finish
+
+EOF
+
+while :
+do
+	echo -en "$ "
+	read -a line
+	case "$line" in
+		"help" )
+			commands;;
+		"contest" )
+			if [[ ${#line[@]} -lt 2 ]]; then
+				echo -e "Usage: contest \033[4mdirname\033[m"
+				continue
+			fi
+			echo ${line[1]};;
+		"task" )
+			if [[ ${#line[@]} -lt 2 ]]; then
+				echo -e "Usage: task \033[4mfilename\033[m"
+				continue
+			fi
+			echo ${line[1]};;
+		"edit" )
+			:;;
+		"case" )
+			:;;
+		"test" )
+			:;;
+		"submit" )
+			:;;
+		"exit" )
+			exit;;
+		* )
+			echo "Error: Unknown command '$line'";;
+	esac
+done
