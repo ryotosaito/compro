@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #if $EDITOR is not set, exit
-#if OS is not Mac, exit or prepare pbcopy alternative 
+#if OS is not Mac, exit or prepare pbcopy alternative
+
 
 commands() {
 	echo "Commands:"
@@ -21,9 +22,9 @@ init() {
 		do
 			read -p "File 'configure' is already exists. Would you like to initialize? [y/n] " answer
 			case $answer in
-				"y" )
+				Y|y )
 					break;;
-				"n" )
+				N|n )
 					return;;
 				* )
 					;;
@@ -40,7 +41,7 @@ init() {
 for OPT in "$@"
 do
 	case $OPT in
-		--init)
+		--init )
 			echo "init"
 			init
 			exit;;
@@ -62,29 +63,29 @@ do
 	echo -en "$ "
 	read -a line
 	case "$line" in
-		"help" )
+		help )
 			commands;;
-		"contest" )
+		contest )
 			if [[ ${#line[@]} -lt 2 ]]; then
 				echo -e "Usage: contest \033[4mdirname\033[m"
 				continue
 			fi
 			echo ${line[1]};;
-		"task" )
+		task )
 			if [[ ${#line[@]} -lt 2 ]]; then
 				echo -e "Usage: task \033[4mfilename\033[m"
 				continue
 			fi
 			echo ${line[1]};;
-		"edit" )
+		edit )
 			:;;
-		"case" )
+		case )
 			:;;
-		"test" )
+		test )
 			:;;
-		"submit" )
+		submit )
 			:;;
-		"exit" )
+		exit )
 			exit;;
 		* )
 			echo "Error: Unknown command '$line'";;
