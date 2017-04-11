@@ -10,6 +10,7 @@ set -Ceu
 
 COMPRO_HOME=`pwd`
 contest=""
+task=""
 declare -A config # init array
 
 config=(
@@ -77,6 +78,13 @@ EOF
 			config[$varname]=$(echo "$line" | cut -d '=' -f 2-)
 		fi
 	done < .configure
+	if [[ "${config[template]}" ]] && [[ ! -e "${config[template]}" ]]; then
+		cat << EOF
+Error: Template file '${config[template]}' does not exist.
+Create the file or initialize your configuration by \`compro --init\`.
+EOF
+		exit 1
+	fi
 }
 
 contest() {
@@ -92,6 +100,25 @@ contest() {
 	fi
 	cd $1
 	contest=$1
+}
+
+task() {
+	# Check argc
+	if [[ $# -ne 1 ]]; then
+		exit 1
+	fi
+	if [[ ! $contest ]]; then
+		echo "Set the contest first."
+		return
+	fi
+	if [[ ! -e $1 ]]; then
+		if [[ "$COMPRO_HOME/${config[template]}" ]]; then
+			cp "$COMPRO_HOME/${config[template]}" $1
+		else
+			touch $1
+		fi
+	fi
+	task=$1
 }
 
 for OPT in "$@"
@@ -141,11 +168,11 @@ do
 			fi
 			contest ${line[1]};;
 		task )
-			if [[ ${#line[@]} -lt 2 ]]; then
+			if [[ ${#line[@]} -ne 2 ]]; then
 				echo -e "Usage: task \033[4mfilename\033[m"
 				continue
 			fi
-			echo ${line[1]};;
+			task ${line[1]};;
 		edit )
 			:;;
 		case )
