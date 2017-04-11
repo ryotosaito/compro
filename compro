@@ -1,9 +1,19 @@
 #!/bin/bash
 
+# Reference
+# http://unix.stackexchange.com/questions/175648/use-config-file-for-my-shell-script
+
 #if $EDITOR is not set, exit
 #if OS is not Mac, exit or prepare pbcopy alternative
 
 set -Ceu
+
+declare -A config # init array
+
+config=(
+	[language]=""
+	[template]=""
+)
 
 commands() {
 	echo "Commands:"
@@ -18,10 +28,10 @@ commands() {
 }
 
 init() {
-	if [[ -e configure ]]; then
+	if [[ -e .configure ]]; then
 		while :
 		do
-			read -p "File 'configure' is already exists. Would you like to initialize? [y/n] " answer
+			read -p "File '.configure' is already exists. Would you like to initialize? [y/n] " answer
 			case $answer in
 				Y|y )
 					break;;
@@ -32,11 +42,37 @@ init() {
 			esac
 		done
 	fi
+
 	# initialize
-	# configure
-	#  + template file
-	#  + compile
-	#  + run
+	# input configure
+	while [[ ! ${config[language]} ]]
+	do
+		read -p "Language (C, etc.) : " config[language]
+	done
+	read -p "Template File (blank if not needed) : " config[template]
+
+	# write .configure
+	cat << EOF >| .configure
+language=${config[language]}
+template=${config[template]}
+EOF
+}
+
+include() {
+	if [[ ! -e .configure ]]; then
+		cat << EOF
+No '.configure' file in this directory.
+Change directory which already configured or run \`compro --init\`.
+EOF
+		exit 1
+	fi
+	while read line
+	do
+		if echo $line | grep -F = &>/dev/null; then
+			varname=$(echo "$line" | cut -d '=' -f 1)
+			config[$varname]=$(echo "$line" | cut -d '=' -f 2-)
+		fi
+	done < .configure
 }
 
 for OPT in "$@"
@@ -48,6 +84,8 @@ do
 			exit;;
 	esac
 done
+
+include
 
 cat << EOF
 
