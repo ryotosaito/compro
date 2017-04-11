@@ -17,14 +17,16 @@ config=(
 
 commands() {
 	echo "Commands:"
-	echo -e "  help     \t\tSee this help"
-	echo -e "  contest  \033[4mdirname\033[m\tCreate (if needed) and change directory for the contest"
-	echo -e "  task     \033[4mfilename\033[m\tCreate (if needed) and set file for the task"
-	echo -e "  edit     \t\tOpen editor and the file set"
-	echo -e "  case     \t\tSet test case from stdin"
-	echo -e "  test     \t\tCompile and run program with test case"
-	echo -e "  submit   \t\tCopy program to clipboard"
-	echo -e "  exit     \t\tFinish and exit"
+	(
+		echo -e "  help-See this help"
+		echo -e "  contest-\033[4mdirname\033[m\tCreate (if needed) and change directory for the contest"
+		echo -e "  task-\033[4mfilename\033[m\tCreate (if needed) and set file for the task"
+		echo -e "  edit-Open editor and the file set"
+		echo -e "  case-Set test case from clipboard"
+		echo -e "  test-Compile and run program with test case"
+		echo -e "  submit-Copy program to clipboard"
+		echo -e "  exit-Finish and exit"
+	) | column -t -s -
 }
 
 init() {
