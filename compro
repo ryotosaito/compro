@@ -112,7 +112,7 @@ task() {
 		return
 	fi
 	if [[ ! -e $1 ]]; then
-		if [[ "$COMPRO_HOME/${config[template]}" ]]; then
+		if [[ "${config[template]}" ]] && [[ "$COMPRO_HOME/${config[template]}" ]]; then
 			cp "$COMPRO_HOME/${config[template]}" $1
 		else
 			touch $1
