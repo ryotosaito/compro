@@ -66,8 +66,8 @@ EOF
 include() {
 	if [[ ! -e .configure ]]; then
 		cat << EOF
-No '.configure' file in this directory.
-Change directory which already configured or run \`compro --init\`.
+Error: No '.configure' file in this directory.
+Change directory which is already configured or run \`compro --init\`.
 EOF
 		exit 1
 	fi
@@ -125,7 +125,6 @@ for OPT in "$@"
 do
 	case $OPT in
 		--init )
-			echo "init"
 			init
 			exit;;
 	esac
