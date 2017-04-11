@@ -3,6 +3,7 @@
 #if $EDITOR is not set, exit
 #if OS is not Mac, exit or prepare pbcopy alternative
 
+set -Ceu
 
 commands() {
 	echo "Commands:"
