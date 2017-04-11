@@ -55,11 +55,27 @@ init() {
 		read -p "Language (C, etc.) : " config[language]
 	done
 	read -p "Template File (blank if not needed) : " config[template]
+	while :
+	do
+		echo -n "Editor"
+		if [[ "$EDITOR" ]]; then
+			echo -n " (blank if you use \$EDITOR:$EDITOR)"
+		fi
+		read -p " : " config[editor]
+		if [[ "${config[editor]}" ]] && [[ ! -e `which ${config[editor]}` ]]; then
+			echo "Error: ${config[editor]} does not exist."
+			continue
+		fi
+		if [[ "${config[editor]}" ]] || [[ "$EDITOR" ]]; then
+			break
+		fi
+	done
 
 	# write .configure
 	cat << EOF >| .configure
 language=${config[language]}
 template=${config[template]}
+editor=${config[editor]}
 EOF
 }
 
@@ -82,6 +98,20 @@ EOF
 		cat << EOF
 Error: Template file '${config[template]}' does not exist.
 Create the file or initialize your configuration by \`compro --init\`.
+EOF
+		exit 1
+	fi
+	if [[ ! "$EDITOR" ]] && [[ ! "${config[editor]}" ]]; then
+		cat << EOF
+Error: No editor is set.
+Export $EDITOR or initialize your configuration by \`compro --init\`.
+EOF
+		exit 1
+	fi
+	if [[ "${config[editor]}" ]] && [[ ! -e `which ${config[editor]}` ]]; then
+		cat << EOF
+Error: Editor '${config[editor]}' does not exist.
+Initialize your configuration by \`compro --init\`.
 EOF
 		exit 1
 	fi
@@ -173,7 +203,17 @@ do
 			fi
 			task ${line[1]};;
 		edit )
-			:;;
+			if [[ ! "$contest" ]]; then
+				echo "Set the contest first."
+			elif [[ ! "$task" ]]; then
+				echo "Set the task first."
+			else
+				if [[ "${config[editor]}" ]]; then
+					${config[editor]} $task
+				else
+					$EDITOR $task
+				fi
+			fi;;
 		case )
 			:;;
 		test )
