@@ -8,6 +8,8 @@
 
 set -Ceu
 
+COMPRO_HOME=`pwd`
+contest=""
 declare -A config # init array
 
 config=(
@@ -77,6 +79,21 @@ EOF
 	done < .configure
 }
 
+contest() {
+	# Check argc
+	if [[ $# -ne 1 ]]; then
+		exit 1
+	fi
+	if [[ `pwd` != $COMPRO_HOME ]]; then
+		cd $COMPRO_HOME
+	fi
+	if [[ ! -e $1 ]]; then
+		mkdir $1
+	fi
+	cd $1
+	contest=$1
+}
+
 for OPT in "$@"
 do
 	case $OPT in
@@ -101,17 +118,28 @@ EOF
 
 while :
 do
-	echo -en "$ "
+	if [[ ${contest} ]]; then
+		echo -n $contest
+	else
+		echo -en "\033[31mContest\033[m"
+	fi
+	echo -n " > "
+	if [[ $task ]]; then
+		echo -n "$task"
+	else
+		echo -en "\033[31mTask\033[m"
+	fi
+	echo -en " $ "
 	read -a line
 	case "$line" in
 		help )
 			commands;;
 		contest )
-			if [[ ${#line[@]} -lt 2 ]]; then
+			if [[ ${#line[@]} -ne 2 ]]; then
 				echo -e "Usage: contest \033[4mdirname\033[m"
 				continue
 			fi
-			echo ${line[1]};;
+			contest ${line[1]};;
 		task )
 			if [[ ${#line[@]} -lt 2 ]]; then
 				echo -e "Usage: task \033[4mfilename\033[m"
