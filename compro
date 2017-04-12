@@ -8,7 +8,7 @@
 
 set -Ceu
 
-COMPRO_HOME=`pwd`
+COMPRO_HOME=$(pwd)
 contest=""
 task=""
 declare -A config # init array
@@ -37,7 +37,7 @@ init() {
 	if [[ -e .configure ]]; then
 		while :
 		do
-			read -p "File '.configure' is already exists. Would you like to initialize? [y/n] " answer
+			read -pr "File '.configure' is already exists. Would you like to initialize? [y/n] " answer
 			case $answer in
 				Y|y )
 					break;;
@@ -53,17 +53,17 @@ init() {
 	# input configure
 	while [[ ! ${config[language]} ]]
 	do
-		read -p "Language (C, etc.) : " config[language]
+		read -pr "Language (C, etc.) : " config[language]
 	done
-	read -p "Template File (blank if not needed) : " config[template]
+	read -pr "Template File (blank if not needed) : " config[template]
 	while :
 	do
 		echo -n "Editor"
 		if [[ "$EDITOR" ]]; then
 			echo -n " (blank if you use \$EDITOR:$EDITOR)"
 		fi
-		read -p " : " config[editor]
-		if [[ "${config[editor]}" ]] && [[ ! -e `which ${config[editor]}` ]]; then
+		read -pr " : " config[editor]
+		if [[ "${config[editor]}" ]] && [[ ! -e $(which "${config[editor]}") ]]; then
 			echo "Error: ${config[editor]} does not exist."
 			continue
 		fi
@@ -88,9 +88,9 @@ Change directory which is already configured or run \`compro --init\`.
 EOF
 		exit 1
 	fi
-	while read line
+	while read -r line
 	do
-		if echo $line | grep -F = &>/dev/null; then
+		if echo "$line" | grep -F = &>/dev/null; then
 			varname=$(echo "$line" | cut -d '=' -f 1)
 			config[$varname]=$(echo "$line" | cut -d '=' -f 2-)
 		fi
@@ -109,7 +109,7 @@ Export $EDITOR or initialize your configuration by \`compro --init\`.
 EOF
 		exit 1
 	fi
-	if [[ "${config[editor]}" ]] && [[ ! -e `which ${config[editor]}` ]]; then
+	if [[ "${config[editor]}" ]] && [[ ! -e $(which "${config[editor]}") ]]; then
 		cat << EOF
 Error: Editor '${config[editor]}' does not exist.
 Initialize your configuration by \`compro --init\`.
@@ -123,14 +123,14 @@ contest() {
 	if [[ $# -ne 1 ]]; then
 		exit 1
 	fi
-	if [[ `pwd` != $COMPRO_HOME ]]; then
-		cd $COMPRO_HOME
+	if [[ $(pwd) != "$COMPRO_HOME" ]]; then
+		cd "$COMPRO_HOME"
 	fi
-	if [[ ! -e $1 ]]; then
-		mkdir $1
+	if [[ ! -e "$1" ]]; then
+		mkdir "$1"
 	fi
-	cd $1
-	contest=$1
+	cd "$1"
+	contest="$1"
 }
 
 task() {
@@ -138,18 +138,18 @@ task() {
 	if [[ $# -ne 1 ]]; then
 		exit 1
 	fi
-	if [[ ! $contest ]]; then
+	if [[ ! "$contest" ]]; then
 		echo "Set the contest first."
 		return
 	fi
-	if [[ ! -e $1 ]]; then
-		if [[ "${config[template]}" ]] && [[ "$COMPRO_HOME/${config[template]}" ]]; then
-			cp "$COMPRO_HOME/${config[template]}" $1
+	if [[ ! -e "$1" ]]; then
+		if [[ "${config[template]}" ]] && [[ -e "$COMPRO_HOME/${config[template]}" ]]; then
+			cp "$COMPRO_HOME/${config[template]}" "$1"
 		else
-			touch $1
+			touch "$1"
 		fi
 	fi
-	task=$1
+	task="$1"
 }
 
 for OPT in "$@"
@@ -175,36 +175,36 @@ EOF
 
 while :
 do
-	if [[ ${contest} ]]; then
-		echo -n $contest
+	if [[ "$contest" ]]; then
+		echo -n "$contest"
 	else
 		echo -en "\033[31mContest\033[m"
 	fi
 	echo -n " > "
-	if [[ $task ]]; then
+	if [[ "$task" ]]; then
 		echo -n "$task"
 	else
 		echo -en "\033[31mTask\033[m"
 	fi
 	echo -en " $ "
-	read -a line
+	read -ar line
 	case "$line" in
 		help )
 			commands;;
 		ls )
-			${line[@]};;
+			"${line[@]}";;
 		contest )
 			if [[ ${#line[@]} -ne 2 ]]; then
 				echo -e "Usage: contest \033[4mdirname\033[m"
 				continue
 			fi
-			contest ${line[1]};;
+			contest "${line[1]}";;
 		task )
 			if [[ ${#line[@]} -ne 2 ]]; then
 				echo -e "Usage: task \033[4mfilename\033[m"
 				continue
 			fi
-			task ${line[1]};;
+			task "${line[1]}";;
 		edit )
 			if [[ ! "$contest" ]]; then
 				echo "Set the contest first."
@@ -212,9 +212,9 @@ do
 				echo "Set the task first."
 			else
 				if [[ "${config[editor]}" ]]; then
-					${config[editor]} $task
+					${config[editor]} "$task"
 				else
-					$EDITOR $task
+					$EDITOR "$task"
 				fi
 			fi;;
 		case )
