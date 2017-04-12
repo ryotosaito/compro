@@ -226,17 +226,17 @@ do
 	echo -en " $ "
 	read -ra line
 	case "$line" in
-		help )
+		help|h )
 			commands;;
 		ls )
 			"${line[@]}";;
-		contest )
+		contest|c )
 			if [[ ${#line[@]} -ne 2 ]]; then
 				echo -e "Usage: contest \033[4mdirname\033[m"
 				continue
 			fi
 			contest "${line[1]}";;
-		task )
+		task|t )
 			if [[ ${#line[@]} -ne 2 ]]; then
 				echo -e "Usage: task \033[4mfilename\033[m"
 				continue
@@ -244,7 +244,7 @@ do
 			if contest_is_set; then
 				task "${line[1]}"
 			fi;;
-		edit )
+		edit|e )
 			if task_is_set; then
 				if [[ "${config[editor]}" ]]; then
 					${config[editor]} "$task"
@@ -252,16 +252,16 @@ do
 					$EDITOR "$task"
 				fi
 			fi;;
-		input )
+		input|i )
 			if task_is_set; then
 				echo "Saving input from clip board..."
 				pbpaste | tee ".inputs/$task" && (echo; echo "Input saved!")
 			fi;;
-		run )
+		run|r )
 			if task_is_set; then
 				compile && (run < ".inputs/$task"; echo)
 			fi;;
-		submit )
+		submit|s )
 			if task_is_set; then
 				pbcopy < "$task" && echo "Program copied!"
 			fi;;
