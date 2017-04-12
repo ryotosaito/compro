@@ -127,7 +127,7 @@ contest() {
 	if [[ $(pwd) != "$COMPRO_HOME" ]]; then
 		cd "$COMPRO_HOME"
 	fi
-	if [[ ! -e "$1" ]]; then
+	if [[ ! -d "$1" ]]; then
 		mkdir "$1"
 	fi
 	cd "$1"
