@@ -140,10 +140,6 @@ task() {
 	if [[ $# -ne 1 ]]; then
 		exit 1
 	fi
-	if [[ ! "$contest" ]]; then
-		echo "Set the contest first."
-		return
-	fi
 	if [[ ! -e "$1" ]]; then
 		if [[ "${config[template]}" ]] && [[ -e "$COMPRO_HOME/${config[template]}" ]]; then
 			cp "$COMPRO_HOME/${config[template]}" "$1"
@@ -152,6 +148,28 @@ task() {
 		fi
 	fi
 	task="$1"
+}
+
+contest_is_set() {
+	if [[ ! "$contest" ]]; then
+		echo "Set the contest first."
+		return 1
+	else
+		return 0
+	fi
+}
+
+task_is_set() {
+	if contest_is_set; then
+		if [[ ! "$task" ]]; then
+			echo "Set the task first."
+			return 1
+		else
+			return 0
+		fi
+	else
+		return 1
+	fi
 }
 
 for OPT in "$@"
@@ -206,13 +224,11 @@ do
 				echo -e "Usage: task \033[4mfilename\033[m"
 				continue
 			fi
-			task "${line[1]}";;
+			if contest_is_set; then
+				task "${line[1]}"
+			fi;;
 		edit )
-			if [[ ! "$contest" ]]; then
-				echo "Set the contest first."
-			elif [[ ! "$task" ]]; then
-				echo "Set the task first."
-			else
+			if task_is_set; then
 				if [[ "${config[editor]}" ]]; then
 					${config[editor]} "$task"
 				else
