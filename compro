@@ -27,8 +27,8 @@ commands() {
 		echo -e "  contest-\033[4mdirname\033[m\tCreate (if needed) and change directory for the contest"
 		echo -e "  task-\033[4mfilename\033[m\tCreate (if needed) and set file for the task"
 		echo -e "  edit-Open editor and the file set"
-		echo -e "  input-Set test case from clipboard"
-		echo -e "  run-Compile and run program with test case"
+		echo -e "  input-Set inputs from clipboard"
+		echo -e "  run-Compile and run program with inputs"
 		echo -e "  submit-Copy program to clipboard"
 		echo -e "  exit-Finish and exit"
 	) | column -t -s -
