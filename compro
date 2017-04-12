@@ -16,6 +16,7 @@ declare -A config # init array
 config=(
 	[language]=""
 	[template]=""
+	[editor]=""
 )
 
 commands() {
