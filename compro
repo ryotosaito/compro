@@ -262,7 +262,9 @@ do
 				compile && (run < ".inputs/$task"; echo)
 			fi;;
 		submit )
-			:;;
+			if task_is_set; then
+				pbcopy < "$task" && echo "Program copied!"
+			fi;;
 		exit )
 			exit;;
 		* )
