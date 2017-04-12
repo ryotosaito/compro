@@ -38,7 +38,7 @@ init() {
 	if [[ -e .configure ]]; then
 		while :
 		do
-			read -pr "File '.configure' is already exists. Would you like to initialize? [y/n] " answer
+			read -rp "File '.configure' is already exists. Would you like to initialize? [y/n] " answer
 			case $answer in
 				Y|y )
 					break;;
@@ -54,16 +54,16 @@ init() {
 	# input configure
 	while [[ ! ${config[language]} ]]
 	do
-		read -pr "Language (C, etc.) : " config[language]
+		read -rp "Language (C, etc.) : " config[language]
 	done
-	read -pr "Template File (blank if not needed) : " config[template]
+	read -rp "Template File (blank if not needed) : " config[template]
 	while :
 	do
 		echo -n "Editor"
 		if [[ "$EDITOR" ]]; then
 			echo -n " (blank if you use \$EDITOR:$EDITOR)"
 		fi
-		read -pr " : " config[editor]
+		read -rp " : " config[editor]
 		if [[ "${config[editor]}" ]] && [[ ! -e $(which "${config[editor]}") ]]; then
 			echo "Error: ${config[editor]} does not exist."
 			continue
