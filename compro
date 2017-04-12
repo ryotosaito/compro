@@ -27,8 +27,8 @@ commands() {
 		echo -e "  contest-\033[4mdirname\033[m\tCreate (if needed) and change directory for the contest"
 		echo -e "  task-\033[4mfilename\033[m\tCreate (if needed) and set file for the task"
 		echo -e "  edit-Open editor and the file set"
-		echo -e "  test-Compile and run program with test case"
 		echo -e "  input-Set test case from clipboard"
+		echo -e "  run-Compile and run program with test case"
 		echo -e "  submit-Copy program to clipboard"
 		echo -e "  exit-Finish and exit"
 	) | column -t -s -
@@ -175,6 +175,20 @@ task_is_set() {
 	fi
 }
 
+compile() {
+	case "${config[language]}" in
+		C )
+			gcc -std=gnu11 -O2 -o .a.out "$task" -lm;;
+	esac
+}
+
+run() {
+	case "${config[language]}" in
+		C )
+			./.a.out;;
+	esac
+}
+
 for OPT in "$@"
 do
 	case $OPT in
@@ -238,12 +252,14 @@ do
 					$EDITOR "$task"
 				fi
 			fi;;
-		test )
-			:;;
 		input )
 			if task_is_set; then
 				echo "Saving input from clip board..."
 				pbpaste | tee ".inputs/$task" && (echo; echo "Input saved!")
+			fi;;
+		run )
+			if task_is_set; then
+				compile && (run < ".inputs/$task"; echo)
 			fi;;
 		submit )
 			:;;
