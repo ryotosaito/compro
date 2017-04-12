@@ -207,7 +207,7 @@ do
 		echo -en "\033[31mTask\033[m"
 	fi
 	echo -en " $ "
-	read -a line
+	read -ra line
 	case "$line" in
 		help )
 			commands;;
