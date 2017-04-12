@@ -132,6 +132,7 @@ contest() {
 	fi
 	cd "$1"
 	contest="$1"
+	task=""
 }
 
 task() {
