@@ -27,8 +27,8 @@ commands() {
 		echo -e "  contest-\033[4mdirname\033[m\tCreate (if needed) and change directory for the contest"
 		echo -e "  task-\033[4mfilename\033[m\tCreate (if needed) and set file for the task"
 		echo -e "  edit-Open editor and the file set"
-		echo -e "  case-Set test case from clipboard"
 		echo -e "  test-Compile and run program with test case"
+		echo -e "  input-Set test case from clipboard"
 		echo -e "  submit-Copy program to clipboard"
 		echo -e "  exit-Finish and exit"
 	) | column -t -s -
@@ -131,6 +131,9 @@ contest() {
 		mkdir "$1"
 	fi
 	cd "$1"
+	if [[ ! -d ".inputs" ]]; then
+		mkdir .inputs
+	fi
 	contest="$1"
 	task=""
 }
@@ -235,10 +238,13 @@ do
 					$EDITOR "$task"
 				fi
 			fi;;
-		case )
-			:;;
 		test )
 			:;;
+		input )
+			if task_is_set; then
+				echo "Saving input from clip board..."
+				pbpaste | tee ".inputs/$task" && (echo; echo "Input saved!")
+			fi;;
 		submit )
 			:;;
 		exit )
