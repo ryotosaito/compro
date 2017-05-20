@@ -246,6 +246,7 @@ do
 
 	# Command
 	read -ra line
+	#allow empty command input
 	set +u
 	case "$line" in
 		help|h )
@@ -294,5 +295,6 @@ do
 		* )
 			echo "Error: Unknown command '$line'";;
 	esac
+	#reset option
 	set -u
 done
