@@ -232,13 +232,13 @@ while :
 do
 	# Prompt
 	if [[ "$contest" ]]; then
-		echo -n "$contest"
+		echo -en "\033[32m$contest\033[m"
 	else
 		echo -en "\033[31mContest\033[m"
 	fi
 	echo -n " > "
 	if [[ "$task" ]]; then
-		echo -n "$task"
+		echo -en "\033[32m$task\033[m"
 	else
 		echo -en "\033[31mTask\033[m"
 	fi
