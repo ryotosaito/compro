@@ -246,6 +246,7 @@ do
 
 	# Command
 	read -ra line
+	set +u
 	case "$line" in
 		help|h )
 			commands;;
@@ -288,7 +289,10 @@ do
 			fi;;
 		exit )
 			exit;;
+		"" )
+			;;
 		* )
 			echo "Error: Unknown command '$line'";;
 	esac
+	set -u
 done
