@@ -34,7 +34,7 @@ commands() {
 		echo -e "  ls-Same as \`ls\` on bash, options are also allowed"
 		echo -e "  contest-\033[4mdirname\033[m\tCreate (if needed) and change directory for the contest"
 		echo -e "  task-\033[4mfilename\033[m\tCreate (if needed) and set file for the task"
-		echo -e "  edit-Open editor and the file set"
+		echo -e "  edit-Open editor to edit the file set in \`task\`"
 		echo -e "  input-Set inputs from clipboard"
 		echo -e "  run-Compile and run program with inputs"
 		echo -e "  submit-Copy program to clipboard"
