@@ -11,6 +11,7 @@ set -Ceu
 COMPRO_HOME=$(pwd)
 contest=""
 task=""
+filename=""
 declare -A config # init array
 
 config=(
@@ -136,6 +137,7 @@ contest() {
 	fi
 	contest="$1"
 	task=""
+	filename=""
 }
 
 task() {
@@ -143,11 +145,16 @@ task() {
 	if [[ $# -ne 1 ]]; then
 		exit 1
 	fi
-	if [[ ! -e "$1" ]]; then
+	filename="$1"
+	case "${config[language]}" in
+		C )
+			filename="${filename}.c";;
+	esac
+	if [[ ! -e "$filename" ]]; then
 		if [[ "${config[template]}" ]] && [[ -e "$COMPRO_HOME/${config[template]}" ]]; then
-			cp "$COMPRO_HOME/${config[template]}" "$1"
+			cp "$COMPRO_HOME/${config[template]}" "$filename"
 		else
-			touch "$1"
+			touch "$filename"
 		fi
 	fi
 	task="$1"
@@ -178,7 +185,7 @@ task_is_set() {
 compile() {
 	case "${config[language]}" in
 		C )
-			gcc -std=gnu11 -O2 -o .a.out "$task" -lm;;
+			gcc -std=gnu11 -O2 -o .a.out "$filename" -lm;;
 	esac
 }
 
@@ -247,9 +254,9 @@ do
 		edit|e )
 			if task_is_set; then
 				if [[ "${config[editor]}" ]]; then
-					${config[editor]} "$task"
+					${config[editor]} "$filename"
 				else
-					$EDITOR "$task"
+					$EDITOR "$filename"
 				fi
 			fi;;
 		input|i )
@@ -263,7 +270,7 @@ do
 			fi;;
 		submit|s )
 			if task_is_set; then
-				pbcopy < "$task" && echo "Program copied!"
+				pbcopy < "$filename" && echo "Program copied!"
 			fi;;
 		exit )
 			exit;;
