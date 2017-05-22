@@ -1,7 +1,7 @@
 # compro
 
 ## Name
-compro - An Assistant Tools for Competitive Programming
+compro - An Assistant Tool for Competitive Programming
 
 ## Usage
 Type
@@ -18,9 +18,9 @@ $ compro
 ```
 then following instructions and prompt appear.
 ```
-=============================================================
-   compro - An Assistant Tools for Competitive Programming
-=============================================================
+============================================================
+   compro - An Assistant Tool for Competitive Programming
+============================================================
 Type `help` to list commands
 Type `exit` to finish
 
