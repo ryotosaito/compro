@@ -204,6 +204,87 @@ run() {
 	esac
 }
 
+delete() {
+	case $1 in
+		curtask )
+			while :
+			do
+				read -rp "Are you sure to delete $task? [y/n] " confirm
+				case "$confirm" in
+					Y|y )
+						rm -f "$filename"
+						task=""
+						filename=""
+						echo "Successfully deleted $task!"
+						break;;
+					N|n )
+						return;;
+					* )
+						:;;
+				esac
+			done;;
+		contest )
+			if [[ ! -d "$COMPRO_HOME/$2" ]]; then
+				echo "contest not found: $2"
+				return
+			fi
+			while :
+			do
+				read -rp "Are you sure to delete $2? [y/n] " confirm
+				case "$confirm" in
+					Y|y )
+						cd "$COMPRO_HOME"
+						rm -rf "$2"
+						if [[ "$contest" = "$2" ]]; then
+							contest=""
+							task=""
+							filename=""
+						else
+							cd "$contest"
+						fi
+						echo "Successfully deleted $2!"
+						break;;
+					N|n )
+						return;;
+					* )
+						:;;
+				esac
+			done;;
+		task )
+			if contest_is_set; then
+				if [[ ! -e "$COMPRO_HOME/$contest/$2.${extension[${config[language]}]}" ]]; then
+					echo "task not found: $2"
+					return
+				fi
+				while :
+				do
+					read -rp "Are you sure to delete $2? [y/n] " confirm
+					case "$confirm" in
+						Y|y )
+							if [[ "$task" = "$2" ]]; then
+								task=""
+								filename=""
+							fi
+							rm -f "$2.${extension[${config[language]}]}"
+							echo "Successfully deleted $2!"
+							break;;
+						N|n )
+							return;;
+						* )
+							:;;
+					esac
+				done
+			fi;;
+	esac
+}
+
+delete_usage() {
+	echo    "Usage:delete"
+	echo -e "      delete contest \033[4mcontestname\033[m"
+	echo -e "      delete task \033[4mtaskname\033[m"
+	echo "If contestname or taskname is not set, current task (if active) will be deleted."
+}
+
 ##################################################################################
 # Main ###########################################################################
 ##################################################################################
@@ -304,6 +385,18 @@ do
 		submit|s )
 			if task_is_set; then
 				pbcopy < "$filename" && echo "Program copied!"
+			fi;;
+		delete )
+			if [[ ${#line[@]} -eq 3 ]]; then
+				if [[ "${line[1]}" = "contest" ]] || [[ "${line[1]}" = "task" ]]; then
+					delete "${line[1]}" "${line[2]}"
+				else
+					delete_usage
+				fi
+			elif [[ ${#line[@]} -eq 1 ]] && task_is_set > /dev/null ; then
+				delete curtask
+			else
+				delete_usage
 			fi;;
 		exit )
 			exit;;
