@@ -16,11 +16,16 @@ contest=""
 task=""
 filename=""
 declare -A config # init array
+declare -A extension
 
 config=(
 	[language]=""
 	[template]=""
 	[editor]=""
+)
+
+extension=(
+	[C]="c"
 )
 
 ##################################################################################
@@ -152,10 +157,7 @@ task() {
 		exit 1
 	fi
 	filename="$1"
-	case "${config[language]}" in
-		C )
-			filename="${filename}.c";;
-	esac
+	filename="${filename}.${extension[${config[language]}]}"
 	if [[ ! -e "$filename" ]]; then
 		if [[ "${config[template]}" ]] && [[ -e "$COMPRO_HOME/${config[template]}" ]]; then
 			cp "$COMPRO_HOME/${config[template]}" "$filename"
