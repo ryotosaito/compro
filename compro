@@ -42,11 +42,11 @@ commands() {
 	) | column -t -s -
 }
 
-init() {
+conf() {
 	if [[ -e .configure ]]; then
 		while :
 		do
-			read -rp "File '.configure' is already exists. Would you like to initialize? [y/n] " answer
+			read -rp "File '.configure' is already exists. Would you like to configure again? [y/n] " answer
 			case $answer in
 				Y|y )
 					break;;
@@ -58,7 +58,6 @@ init() {
 		done
 	fi
 
-	# initialize
 	# input configure
 	while [[ ! ${config[language]} ]]
 	do
@@ -93,7 +92,7 @@ include() {
 	if [[ ! -e .configure ]]; then
 		cat << EOF
 Error: No '.configure' file in this directory.
-Change directory which is already configured or run \`compro --init\`.
+Change directory which is already configured or run \`compro --conf\`.
 EOF
 		exit 1
 	fi
@@ -107,21 +106,21 @@ EOF
 	if [[ "${config[template]}" ]] && [[ ! -e "${config[template]}" ]]; then
 		cat << EOF
 Error: Template file '${config[template]}' does not exist.
-Create the file or initialize your configuration by \`compro --init\`.
+Create the file or initialize your configuration by \`compro --conf\`.
 EOF
 		exit 1
 	fi
 	if [[ ! "$EDITOR" ]] && [[ ! "${config[editor]}" ]]; then
 		cat << EOF
 Error: No editor is set.
-Export $EDITOR or initialize your configuration by \`compro --init\`.
+Export $EDITOR or configure by \`compro --conf\`.
 EOF
 		exit 1
 	fi
 	if [[ "${config[editor]}" ]] && [[ ! -e $(which "${config[editor]}") ]]; then
 		cat << EOF
 Error: Editor '${config[editor]}' does not exist.
-Initialize your configuration by \`compro --init\`.
+Configure by \`compro --conf\`.
 EOF
 		exit 1
 	fi
@@ -210,8 +209,8 @@ run() {
 for OPT in "$@"
 do
 	case $OPT in
-		--init )
-			init
+		--conf )
+			conf
 			exit;;
 	esac
 done
