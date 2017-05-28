@@ -300,6 +300,9 @@ done
 
 include
 
+mkdir .trash
+trap "rm -rf \"$COMPRO_HOME/.trash\"; exit 1" 1 2 3 15
+
 cat << EOF
 
 ============================================================
@@ -399,6 +402,7 @@ do
 				delete_usage
 			fi;;
 		exit )
+			rm -rf "$COMPRO_HOME/.trash"
 			exit;;
 		"" )
 			;;
