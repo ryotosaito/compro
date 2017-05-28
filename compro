@@ -213,10 +213,12 @@ delete() {
 				read -rp "Are you sure to delete $task? [y/n] " confirm
 				case "$confirm" in
 					Y|y )
-						rm -f "$filename"
+						rm -rf $TRASHBOX/*
+						mkdir "$TRASHBOX/$contest"
+						mv "$filename" "$TRASHBOX/$contest/."
+						echo "Successfully deleted $task!"
 						task=""
 						filename=""
-						echo "Successfully deleted $task!"
 						break;;
 					N|n )
 						return;;
@@ -235,7 +237,8 @@ delete() {
 				case "$confirm" in
 					Y|y )
 						cd "$COMPRO_HOME"
-						rm -rf "$2"
+						rm -rf $TRASHBOX/*
+						mv $2 "$TRASHBOX/."
 						if [[ "$contest" = "$2" ]]; then
 							contest=""
 							task=""
@@ -266,7 +269,9 @@ delete() {
 								task=""
 								filename=""
 							fi
-							rm -f "$2.${extension[${config[language]}]}"
+							rm -rf $TRASHBOX/*
+							mkdir "$TRASHBOX/$contest"
+							mv "$2.${extension[${config[language]}]}" "$TRASHBOX/$contest/."
 							echo "Successfully deleted $2!"
 							break;;
 						N|n )
@@ -301,7 +306,11 @@ done
 
 include
 
-mkdir "$TRASHBOX"
+if [[ ! -d "$TRASHBOX" ]]; then
+	mkdir "$TRASHBOX"
+else
+	rm -rf $TRASHBOX/*
+fi
 trap "rm -rf \"$TRASHBOX\"; exit 1" 1 2 3 15
 
 cat << EOF
