@@ -44,6 +44,8 @@ commands() {
 		echo -e "  input-Set inputs from clipboard"
 		echo -e "  run-Compile and run program with inputs"
 		echo -e "  submit-Copy program to clipboard"
+		echo -e "  delete-Delete current task"
+		echo -e "  recovery-Revive latest-deleted task"
 		echo -e "  exit-Finish and exit"
 	) | column -t -s -
 }
