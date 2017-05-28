@@ -291,6 +291,17 @@ delete_usage() {
 	echo "If contestname or taskname is not set, current task (if active) will be deleted."
 }
 
+recovery() {
+	# If only one directory exists (due to a design, no more than one directory exist in a trashbox.)
+	if [[ $(ls $TRASHBOX | wc -l) -eq 1 ]]; then 
+		rsync -a "$TRASHBOX/" "$COMPRO_HOME"
+		rm -rf $TRASHBOX/*
+		echo "Successfully recovered!"
+	else
+		echo "Error: No recovery file."
+	fi
+}
+
 ##################################################################################
 # Main ###########################################################################
 ##################################################################################
@@ -411,6 +422,8 @@ do
 			else
 				delete_usage
 			fi;;
+		recovery )
+			recovery;;
 		exit )
 			rm -rf "$TRASHBOX"
 			exit;;
