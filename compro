@@ -258,7 +258,7 @@ delete() {
 			done;;
 		task )
 			if contest_is_set; then
-				if [[ ! -e "$COMPRO_HOME/$contest/$2.${extension[${config[language]}]}" ]]; then
+				if [[ ! -e "$2.${extension[${config[language]}]}" ]]; then
 					echo "task not found: $2"
 					return
 				fi
