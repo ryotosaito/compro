@@ -218,6 +218,10 @@ delete() {
 						rm -rf $TRASHBOX/*
 						mkdir "$TRASHBOX/$contest"
 						mv "$filename" "$TRASHBOX/$contest/."
+						if [[ -e ".inputs/$task" ]]; then
+							mkdir "$TRASHBOX/$contest/.inputs"
+							mv ".inputs/$task" "$TRASHBOX/$contest/.inputs"
+						fi
 						echo "Successfully deleted $task!"
 						task=""
 						filename=""
@@ -274,6 +278,10 @@ delete() {
 							rm -rf $TRASHBOX/*
 							mkdir "$TRASHBOX/$contest"
 							mv "$2.${extension[${config[language]}]}" "$TRASHBOX/$contest/."
+							if [[ -e ".inputs/$2" ]]; then
+								mkdir "$TRASHBOX/$contest/.inputs"
+								mv ".inputs/$2" "$TRASHBOX/$contest/.inputs"
+							fi
 							echo "Successfully deleted $2!"
 							break;;
 						N|n )
