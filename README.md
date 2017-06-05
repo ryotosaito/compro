@@ -25,11 +25,11 @@ and update compro line 1 as below.
 Type
 ```sh
 $ cd workspace_directory # Your workspace
-$ compro --init
+$ compro --conf
 ```
-so that initialize the directory for working.
+so that configure the directory for working.
 
-After initialization, type
+After configuration, type
 
 ```sh
 $ compro
@@ -60,8 +60,8 @@ A.c B.c
 ```
 
 ### Using template file
-Before initialization `compro --init`, you may create a template file in the same directory.
-If you decleare template file during initialization, all program files are copied from the template file.
+Before configuration `compro --conf`, you may create a template file in the same directory.
+If you decleare template file during configuration, all program files are copied from the template file.
 
 ### Easy test and easy submit
 Example: test input for problem A is "1 2".
