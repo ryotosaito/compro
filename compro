@@ -71,7 +71,15 @@ conf() {
 	do
 		read -rp "Language (C, etc.) : " config[language]
 	done
-	read -rp "Template File (blank if not needed) : " config[template]
+	while :
+	do
+		read -rp "Template File (blank if not needed) : " config[template]
+		if [[ -z "${config[template]}" ]] || [[ -e ${config[template]} ]]; then
+			break;
+		else
+			echo "Error: file not found: ${config[template]}"
+		fi
+	done
 	while :
 	do
 		echo -n "Editor"
