@@ -75,15 +75,15 @@ conf() {
 	while :
 	do
 		echo -n "Editor"
-		if [[ "$EDITOR" ]]; then
+		if [[ ! -z "${EDITOR-}" ]]; then
 			echo -n " (blank if you use \$EDITOR:$EDITOR)"
 		fi
 		read -rp " : " config[editor]
-		if [[ "${config[editor]}" ]] && [[ ! -e $(which "${config[editor]}") ]]; then
+		if [[ ! -z ${config[editor]-} ]] && [[ ! -e $(which "${config[editor]}") ]]; then
 			echo "Error: ${config[editor]} does not exist."
 			continue
 		fi
-		if [[ "${config[editor]}" ]] || [[ "$EDITOR" ]]; then
+		if [[ "${config[editor]}" ]] || [[ "${EDITOR-}" ]]; then
 			break
 		fi
 	done
@@ -118,10 +118,10 @@ Create the file or initialize your configuration by \`compro --conf\`.
 EOF
 		exit 1
 	fi
-	if [[ ! "$EDITOR" ]] && [[ ! "${config[editor]}" ]]; then
+	if [[ ! ${EDITOR-} ]] && [[ ! "${config[editor]}" ]]; then
 		cat << EOF
 Error: No editor is set.
-Export $EDITOR or configure by \`compro --conf\`.
+Export \$EDITOR or configure by \`compro --conf\`.
 EOF
 		exit 1
 	fi
@@ -362,8 +362,10 @@ do
 
 	# Command
 	read -ra line
+	if [[ -z ${line-} ]]; then
+		continue;
+	fi
 	#allow empty command input
-	set +u
 	case "$line" in
 		help|h )
 			commands;;
@@ -443,5 +445,4 @@ do
 			echo "Error: Unknown command '$line'";;
 	esac
 	#reset option
-	set -u
 done
