@@ -27,6 +27,7 @@ config=(
 
 extension=(
 	[C]="c"
+	[C++]="cpp"
 )
 
 ##################################################################################
@@ -205,12 +206,14 @@ compile() {
 	case "${config[language]}" in
 		C )
 			gcc -std=gnu11 -O2 -o .a.out "$filename" -lm;;
+		C++ )
+			g++ -std=gnu++03 -O2 -o .a.out "$filename";;
 	esac
 }
 
 run() {
 	case "${config[language]}" in
-		C )
+		C | C++ )
 			./.a.out;;
 	esac
 }

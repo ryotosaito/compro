@@ -90,6 +90,7 @@ Then all you have to do is pasting your program to the submit page.
 
 ## Available Language
 - C
+- C++
 
 ## LICENSE
 MIT
