@@ -403,7 +403,6 @@ do
 	if [[ -z ${line-} ]]; then
 		continue;
 	fi
-	#allow empty command input
 	case "$line" in
 		help|h )
 			commands;;
@@ -482,5 +481,4 @@ do
 		* )
 			echo "Error: Unknown command '$line'";;
 	esac
-	#reset option
 done
