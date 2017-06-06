@@ -18,6 +18,7 @@ task=""
 filename=""
 declare -A config # init array
 declare -A extension
+declare -a languages
 
 config=(
 	[language]=""
@@ -28,6 +29,10 @@ config=(
 extension=(
 	[C]="c"
 	[C++]="cpp"
+)
+
+languages=(
+	"C" "C++"
 )
 
 ##################################################################################
@@ -67,11 +72,33 @@ conf() {
 		done
 	fi
 
+	i=0;
 	# input configure
 	while [[ ! ${config[language]} ]]
 	do
-		read -rp "Language (C, etc.) : " config[language]
+		echo -ne "\033[G\033[1M"
+		echo -ne "Language(press up/down key) : \033[30;47m${languages[$i]}\033[m"
+		read -rsn1 key
+		if [[ "$key" == $'\x1b' ]]; then
+			read -rsn2 rest
+			key="$key$rest"
+		fi
+		case "$key" in
+			$'\x1b\x5b\x41' ) # up key
+				if [[ $i -gt 0 ]]; then
+					i=$(echo $i - 1 | bc)
+				fi;;
+			$'\x1b\x5b\x42' ) # down key
+				if [[ $i -lt $(expr ${#languages[@]} - 1) ]]; then
+					i=$(echo $i + 1 | bc)
+				fi;;
+			"" ) # enter key
+				config[language]=${languages[$i]}
+				echo;;
+		esac
 	done
+	echo -ne "\033[F\033[1M"
+	echo "Language(press up/down key) : ${config[language]}"
 	while :
 	do
 		read -rp "Template File (blank if not needed) : " config[template]
