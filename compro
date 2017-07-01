@@ -230,19 +230,23 @@ task_is_set() {
 }
 
 compile() {
+	set +e
 	case "${config[language]}" in
 		C )
 			gcc -std=gnu11 -O2 -o .a.out "$filename" -lm;;
 		C++ )
 			g++ -std=gnu++03 -O2 -o .a.out "$filename";;
 	esac
+	set -e
 }
 
 run() {
+	set +e
 	case "${config[language]}" in
 		C | C++ )
 			./.a.out;;
 	esac
+	set -e
 }
 
 delete() {
