@@ -15,11 +15,6 @@ Install bash via [Homebrew](https://brew.sh/)
 ```sh
 $ brew install bash
 ```
-and update compro line 1 as below.
-```diff
--#!/bin/bash
-+#!/usr/local/bin/bash
-```
 
 ## Usage
 Type
