@@ -4,8 +4,13 @@
 compro - An Assistant Tool for Competitive Programming
 
 ## Requirements
-- OS X (any versions)
+### OS
+- OS X
+- Linux (xsel installed)
+
+### Shell
 - Bash 4.0 or higher
+
 ### How to check
 ```sh
 $ bash --version
